@@ -20,8 +20,7 @@ const Entry = () => {
         <div className="mb-5">
           <div>
             <h1
-              className="text-4xl font-bold"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
+              className="text-4xl font-bold fontFamily 'Poppins', sans-serif"
             >
               Welcome!
             </h1>

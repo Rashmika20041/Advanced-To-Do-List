@@ -25,8 +25,7 @@ const Entry = () => {
           <div className="mb-5">
             <div>
               <h1
-                className="text-4xl font-bold"
-                style={{ fontFamily: "'Poppins', sans-serif" }}
+                className="text-4xl font-bold fontFamily 'Poppins', sans-serif"
               >
                 Sign In
               </h1>
@@ -49,7 +48,6 @@ const Entry = () => {
                   className="cursor-pointer text-gray-500 hover:text-gray-800 md:text-xl absolute md:right-15 md:mt-4"
                   onClick={() => setShowPassword((prev) => !prev)}
                   title={showPassword ? "Hide Password" : "Show Password"}
-                  style={{ cursor: "pointer", marginLeft: "8px" }}
                 >
                   {showPassword ? <IoMdEye /> : <IoMdEyeOff />}
                 </span>
