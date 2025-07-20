@@ -4,7 +4,7 @@ import entryBg from "../assets/entryBg.png";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import AnimatedPage from "./AnimatedPage";
 
-const Signin = () => {
+const Signup = () => {
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -25,14 +25,19 @@ const Signin = () => {
           <div className="mb-5">
             <div>
               <h1 className="text-4xl font-bold fontFamily 'Poppins', sans-serif">
-                Sign In
+                Sign Up
               </h1>
             </div>
             <div className="mt-8 md:text-base md:mb-2">
               <input
+                type="name"
+                placeholder="Name"
+                className="border border-gray-300 p-2 md:p-2 md:w-8/9 rounded-md w-full"
+              />
+              <input
                 type="email"
                 placeholder="Email"
-                className="border border-gray-300 p-2 md:p-2 md:w-8/9 rounded-md w-full"
+                className="border border-gray-300 p-2 md:p-2 md:w-8/9 mt-4 rounded-md w-full"
               />
               <div className="flex items-center mt-1 relative">
                 <input
@@ -43,7 +48,7 @@ const Signin = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <span
-                  className="cursor-pointer text-gray-500 hover:text-gray-800 text-md md:text-xl absolute right-4 mt-4 md:right-15 md:mt-4"
+                  className="cursor-pointer text-gray-500 hover:text-gray-800 md:text-xl absolute right-4 mt-4 md:right-15 md:mt-4"
                   onClick={() => setShowPassword((prev) => !prev)}
                   title={showPassword ? "Hide Password" : "Show Password"}
                 >
@@ -53,16 +58,16 @@ const Signin = () => {
             </div>
           </div>
           <div>
-            <button className="bg-[#faf700] text-black mt-4 md:mt-1 px-33 md:px-43 py-2 rounded-lg hover:bg-[#04AA6D] hover:text-white transition duration-300 font-semibold select-none">
-              Sign In
+            <button className="bg-[#faf700] text-black mt-4 md:mt-1 px-33 md:px-42 py-2 rounded-lg hover:bg-[#04AA6D] hover:text-white transition duration-300 font-semibold select-none">
+              Sign Up
             </button>
             <p className="mt-3 font-semibold text-center select-none">
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <Link
-                to="/signup"
+                to="/signin"
                 className="text-[#04AA6D] hover:text-gray-800 "
               >
-                Sign Up
+                Sign In
               </Link>
             </p>
           </div>
@@ -72,4 +77,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Signup;
