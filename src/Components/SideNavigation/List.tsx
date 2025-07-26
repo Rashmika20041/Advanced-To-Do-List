@@ -3,6 +3,10 @@ import NewList from "./NewList";
 import { FaPlus } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 
+type TaskProps = {
+  onTask: (name: string) => void;
+}
+
 const List = () => {
 
   const [lists, setLists] = useState<{ name: string; color: string }[]>([]);
@@ -11,16 +15,25 @@ const List = () => {
   const [formKey, setFormKey] = useState(0);
 
   const handleNewList = () => {
-    setShowNewList((prev) => {
-      if (prev) {
-        setShowDivider(true);
-        return false;
-      } else {
-        setShowDivider(false);
-        setFormKey((prev) => prev + 1);
-        return true;
-      }
-    });
+    // setShowNewList((prev) => {
+    //   if (prev) {
+    //     setShowDivider(true);
+    //     return false;
+    //   } else {
+    //     setShowDivider(false);
+    //     setFormKey((prev) => prev + 1);
+    //     return true;
+    //   }
+    // });
+
+    if (!showNewList) {
+      setShowNewList(true);
+      setShowDivider(false);
+      setFormKey((prev) => prev + 1);
+    }
+    if (showNewList) {
+      setShowDivider(true);
+    }
   };
 
   const handleCloseNewList = () => {
@@ -79,7 +92,7 @@ const List = () => {
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.4 }}
           >
-            <NewList onClose={handleCloseNewList} onAdd={handleAddListItem} />
+            <NewList onClose={handleCloseNewList} onAdd={handleAddListItem}/>
           </motion.div>
         )}
       </AnimatePresence>

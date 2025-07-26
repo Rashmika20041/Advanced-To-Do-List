@@ -1,6 +1,6 @@
 import "@fontsource/poppins/500.css";
 import Navigation from "../SideNavigation/Navigation";
-import { FaArrowRight, FaArrowLeft  } from "react-icons/fa6";
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import { useState } from "react";
 import { MdSaveAlt } from "react-icons/md";
@@ -32,7 +32,7 @@ const StickyWall = () => {
       id: Date.now(),
       topic: "",
       description: "",
-      color: "#fde68a",
+      color: "#a7f3d0",
       isEditing: true,
     };
     setNotes([newNote, ...notes]);
@@ -41,20 +41,25 @@ const StickyWall = () => {
   };
 
   const handleSave = (id: number) => {
-  setNotes((prevNotes) => {
-    return prevNotes.map((note) => {
-      if (note.id === id) {
-        if (note.topic.trim() === "" && note.description.trim() === "") {
-          return note; // Don't change it
+    setNotes((prevNotes) => {
+      return prevNotes.map((note) => {
+        if (note.id === id) {
+          if (note.topic.trim() === "" && note.description.trim() === "") {
+            return note;
+          }
+          return { ...note, isEditing: false };
         }
-        return { ...note, isEditing: false };
-      }
-      return note;
+        return note;
+      });
     });
-  });
-};
+  };
 
   const handleNoteClick = (id: number) => {
+    const isEdit = notes.some((note) => note.isEditing);
+    if (isEdit) {
+      return;
+    }
+
     setNotes((prev) =>
       prev.map((note) => (note.id === id ? { ...note, isEditing: true } : note))
     );
@@ -97,7 +102,10 @@ const StickyWall = () => {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center items-center px-5 py-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <div
+          className="flex flex-col justify-center items-center px-5 py-2"
+          style={{ fontFamily: "Poppins, sans-serif" }}
+        >
           {showBorder && (
             <div className="p-4 grid md:grid-cols-3 sm:grid-cols-1 gap-5 border-1 border-gray-300 rounded-[8px]">
               {currentNotes.map((note) => (
@@ -148,16 +156,23 @@ const StickyWall = () => {
                           }}
                           className="font-bold text-3xl pl-15 py-1 text-gray-700 hover:text-gray-400"
                         >
-                          <span><MdSaveAlt /></span>
+                          <span>
+                            <MdSaveAlt />
+                          </span>
                         </button>
                       </div>
                     </>
                   ) : (
                     <>
-                      <h2 className="font-bold text-lg">{note.topic}</h2>
-                      <p className="text-sm text-gray-700 mt-2">
+                      <h2 className="font-bold text-lg select-none">
+                        {note.topic}
+                      </h2>
+                      <pre
+                        className="text-sm text-gray-700 mt-2 select-none"
+                        style={{ fontFamily: "Poppins, sans-serif" }}
+                      >
                         {note.description}
-                      </p>
+                      </pre>
                     </>
                   )}
                 </div>
