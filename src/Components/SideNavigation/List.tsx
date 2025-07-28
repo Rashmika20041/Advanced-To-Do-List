@@ -3,13 +3,13 @@ import NewList from "./NewList";
 import { FaPlus } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 
-
 const List = () => {
-
   const [lists, setLists] = useState<{ name: string; color: string }[]>([]);
-  const [showNewList, setShowNewList] = useState(false);
-  const [showDivider, setShowDivider] = useState(true);
-  const [formKey, setFormKey] = useState(0);
+  const [showNewList, setShowNewList] = useState<boolean>(false);
+  const [showDivider, setShowDivider] = useState<boolean>(true);
+  const [formKey, setFormKey] = useState<number>(0);
+  const [error, setError] = useState<string>("");
+  const maxList = 3;
 
   const handleNewList = () => {
     // setShowNewList((prev) => {
@@ -23,6 +23,8 @@ const List = () => {
     //   }
     // });
 
+    setError("");
+
     if (!showNewList) {
       setShowNewList(true);
       setShowDivider(false);
@@ -30,6 +32,12 @@ const List = () => {
     }
     if (showNewList) {
       setShowDivider(true);
+    }
+
+    if (lists.length >= maxList) {
+      setError(`You can only have a maximum of ${maxList} lists.`);
+      setShowNewList(false);
+      return;
     }
   };
 
@@ -53,17 +61,16 @@ const List = () => {
         Lists
       </h2>
 
-       <div className="flex flex-col gap-2 mb-4">
+      <div className="flex flex-col gap-2 mb-4">
         {lists.map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-4 px-2 py-1"
-          >
+          <div key={index} className="flex items-center gap-4 px-2 py-1">
             <div
               className="w-4 h-4 rounded-[4px] border border-gray-300"
               style={{ backgroundColor: item.color }}
             ></div>
-            <span className="text-sm font-medium text-gray-700">{item.name}</span>
+            <span className="text-sm font-medium text-gray-700">
+              {item.name}
+            </span>
           </div>
         ))}
       </div>
@@ -89,12 +96,17 @@ const List = () => {
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.4 }}
           >
-            <NewList onClose={handleCloseNewList} onAdd={handleAddListItem}/>
+            <NewList onClose={handleCloseNewList} onAdd={handleAddListItem} />
           </motion.div>
         )}
       </AnimatePresence>
 
       {showDivider && <hr className="my-4 text-gray-200" />}
+      {error && (
+        <div className="mt-3 p-2 bg-red-100 border border-red-400 text-red-700 rounded-md text-xs">
+          {error}
+        </div>
+      )}
     </div>
   );
 };

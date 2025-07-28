@@ -2,7 +2,7 @@ import "@fontsource/poppins/500.css";
 import { FaPlus } from "react-icons/fa6";
 import Navigation from "../SideNavigation/Navigation";
 import Task from "../Tasks/Task";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Upcoming = () => {
@@ -45,9 +45,9 @@ const Upcoming = () => {
           </div>
         </div>
         <div className="py-3">
-          <div className={`flex flex-row justify-left w-233 ${borderWidth ? "w-[572px]" : "w-[930px]"} items-center h-10 mt-2 border-1 border-gray-200 rounded-[8px] px-5`}>
+          <div className="mt-2">
             <button
-              className="md:text-sm text-gray-400 hover:text-[#11110f] select-none"
+              className={`flex flex-row justify-left w-233 ${borderWidth ? "w-[572px]" : "w-[930px]"} items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border-1 border-gray-200 hover:border-gray-400 rounded-[8px] h-10 px-5`}
               onClick={newTask}
             >
               <span className="flex flex-row items-center gap-3">

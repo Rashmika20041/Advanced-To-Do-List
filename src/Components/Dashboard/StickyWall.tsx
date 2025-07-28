@@ -83,15 +83,17 @@ const StickyWall = () => {
   return (
     <div className="flex pl-5 pt-5">
       <Navigation />
-      <div className="flex flex-col">
+      <div
+        className="flex flex-col"
+      >
         <div className="flex flex-row justify-left items-center pl-6 h-14">
-          <h1 className="md:text-4xl font-bold text-gray-800">Sticky Wall</h1>
+          <h1 className="md:text-4xl font-bold text-gray-800" style={{ fontFamily: "Poppins, sans-serif" }}>Sticky Wall</h1>
         </div>
 
         <div className="py-3 px-6">
-          <div className={`flex flex-row justify-left w-233 w-[930px] items-center h-10 mt-2 border-1 border-gray-200 rounded-[8px] px-5`}>
+          <div className="mt-2">
             <button
-              className="md:text-sm text-gray-400 hover:text-[#11110f] select-none"
+              className="flex flex-row justify-left w-233 items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border-1 border-gray-200 hover:border-gray-400 rounded-[8px] h-10 px-5"
               onClick={handleAddSticky}
             >
               <span className="flex flex-row items-center gap-3">
