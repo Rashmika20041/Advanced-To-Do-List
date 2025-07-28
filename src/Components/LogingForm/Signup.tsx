@@ -238,7 +238,7 @@ const Signup = () => {
               </button>
               <button
                 type="submit"
-                className="bg-[#faf700] text-black mt-4 md:mt-1 px-23 md:px-42 py-2 rounded-lg hover:bg-[#04AA6D] hover:text-white transition duration-300 font-semibold select-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-[#faf700] text-black mt-4 md:mt-1 px-23 md:px-4 w-[394px] py-2 rounded-lg hover:bg-[#04AA6D] hover:text-white transition duration-300 font-semibold select-none disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={loading}
               >
                 {loading ? "Signing Up..." : "Sign Up"}
