@@ -1,13 +1,15 @@
 import { IoClose } from "react-icons/io5";
-import { use, useEffect, useState } from "react";
-import NewList from "../SideNavigation/NewList";
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 type TaskProps = {
   onClose: () => void;
 };
 
 const Task = ({ onClose }: TaskProps) => {
-  const [list, setList] = useState<{ name: string }[]>([]);
+  const [list] = useState<{ name: string }[]>([]);
+  const [startDate, setStartDate] = useState<Date | null>(null);
 
   return (
     <div
@@ -29,19 +31,19 @@ const Task = ({ onClose }: TaskProps) => {
       <div>
         <div className="flex flex-row justify-left items-center h-10 mt-2 border-1 border-gray-200 rounded-[5px] px-2">
           <input
-            className="md:text-sm font-sm text-gray-800 placeholder:text-gray-400 outline-none bg-transparent select-none"
+            className="md:text-sm font-sm text-gray-800 placeholder:text-gray-500 outline-none bg-transparent select-none"
             type="text"
             placeholder="Task..."
           />
         </div>
-        <div className="flex flex-col border-1 border-gray-200 rounded-md w-75 h-35 py-3 px-2 mt-3">
+        <div className="flex flex-col border-1 border-gray-200 rounded-md w-75 h-30 py-3 px-2 mt-4">
           <textarea
             placeholder="Description"
-            className="text-sm resize-none text-gray-800 placeholder:text-gray-400 h-full bg-transparent outline-none select-none"
+            className="text-sm resize-none text-gray-800 placeholder:text-gray-500 h-full bg-transparent outline-none select-none"
           />
         </div>
         <div className="flex flex-col mt-5">
-          <div className="flex flex-row justify-between items-center gap-15 mb-2">
+          <div className="flex flex-row justify-between items-center gap-15 mb-3">
             <h2
               className="text-xs font-semibold mb-1 text-gray-600"
               style={{ fontFamily: "Poppins, sans-serif" }}
@@ -49,15 +51,35 @@ const Task = ({ onClose }: TaskProps) => {
               Task
             </h2>
             <div className="w-64">
-              <select className="w-[150px] h-[30px] border border-gray-300 rounded-md px-3 text-sm focus:outline-none">
+              <select className="w-[100px] h-[30px] border border-gray-300 rounded-md px-3 text-sm focus:outline-none">
                 {list.map((item, index) => (
                   <option key={index} value={item.name}>
                     {item.name}
                   </option>
                 ))}
               </select>
-              
             </div>
+          </div>
+          <div className="flex flex-row justify-between items-center gap-5 mb-2">
+            <h2
+              className="text-xs font-semibold mb-1 text-gray-600"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              Due Date
+            </h2>
+            <div className="w-53">
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                dateFormat="yyyy-MM-dd"
+                className="w-[100px] h-[30px] border border-gray-300 rounded-md px-3 text-xs focus:outline-none"
+                placeholderText="Select date"
+              />
+            </div>
+          </div>
+          <div className="absolute flex flex-row justify-between gap-5 bottom-5">
+            <button className="border-1 border-gray-400 rounded-md py-2 px-8 bg-transparent font-semibold text-gray-500 hover:text-gray-900 text-xs">Delete Task</button>
+            <button className="rounded-md py-2 px-7 bg-[#FFE100] font-semibold text-xs hover:bg-[#FFD000]">Save Changes</button>
           </div>
         </div>
       </div>

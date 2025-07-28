@@ -3,9 +3,6 @@ import NewList from "./NewList";
 import { FaPlus } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 
-type TaskProps = {
-  onTask: (name: string) => void;
-}
 
 const List = () => {
 

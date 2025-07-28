@@ -1,12 +1,146 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import entryBg from "../assets/entryBg.png";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
+import google from "../assets/google.png";
 import AnimatedPage from "./AnimatedPage";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 const Signup = () => {
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+
+  const navigate = useNavigate();
+  const auth = getAuth();
+
+  // React.useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       navigate("/today");
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, [auth, navigate]);
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string) => {
+    return (
+      password.length >= 6 && /\d/.test(password) && /[a-zA-Z]/.test(password)
+    );
+  };
+
+  const handleGoogleSignIn = async () => {
+  const provider = new GoogleAuthProvider();
+  const auth = getAuth();
+
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    console.log("Google sign-in success:", user);
+  } catch (error) {
+    console.error("Google sign-in error:", error);
+  }finally {
+    setLoading(false);
+  }
+};
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!firstName.trim()) {
+      setError("First name is required.");
+      return;
+    }
+
+    if (!lastName.trim()) {
+      setError("Last name is required.");
+      return;
+    }
+
+    if (!email.trim()) {
+      setError("Email is required.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!password) {
+      setError("Password is required.");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      setError(
+        "Password must be at least 6 characters long. and contain both letters and numbers."
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      await updateProfile(user, {
+        displayName: `${firstName.trim()} ${lastName.trim()}`,
+      });
+
+      console.log("User signed up successfully:", user);
+      console.log(user.displayName);
+
+      navigate("/today");
+      
+    } catch (error: any) {
+      console.error("Error signing up:", error.code, error.message);
+
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          setError(
+            "This email is already registered. Please use a different email or sign in."
+          );
+          break;
+        case "auth/invalid-email":
+          setError("Please enter a valid email address.");
+          break;
+        case "auth/weak-password":
+          setError("Password is too weak. Please use at least 6 characters.");
+          break;
+        case "auth/network-request-failed":
+          setError(
+            "Network error. Please check your connection and try again."
+          );
+          break;
+        default:
+          setError("An error occurred during sign up. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row overflow-x-hidden w-full items-center justify-center md:pr-4 md:items-center h-screen bg-gray-100 md:gap-6 overflow-hidden">
@@ -20,64 +154,107 @@ const Signup = () => {
           className="w-full h-full object-cover max-h-[530px]"
         />
       </div>
+
       <AnimatedPage>
         <div className="flex flex-col justify-center text-center p-4 md:px-20 md:text-left md:left-0 md:w-1/4 md:rounded-2xl md:border-1 md:border-gray-200 md:w-[600px] md:bg-gray-250 md:h-[525px]">
-          <div className="mb-5">
-            <div>
-              <h1 className="text-4xl font-bold fontFamily 'Poppins', sans-serif">
-                Sign Up
-              </h1>
-            </div>
-            <div className="mt-8 md:text-base md:mb-2">
-              <div className="flex flex-row md:w-8/9 gap-4">
-                <input
-                  type="fname"
-                  placeholder="First Name"
-                  className="border border-gray-300 p-2 md:p-2 rounded-md w-full"
-                />
-                <input
-                  type="lname"
-                  placeholder="Last Name"
-                  className="border border-gray-300 p-2 md:p-2 rounded-md w-full"
-                />
-              </div>
-              <input
-                type="email"
-                placeholder="Email"
-                className="border border-gray-300 p-2 md:p-2 md:w-8/9 mt-4 rounded-md w-full"
-              />
-              <div className="flex items-center mt-1 relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  className="border border-gray-300 p-2 md:p-2 md:w-8/9 rounded-md w-full mt-3"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <span
-                  className="cursor-pointer text-gray-500 hover:text-gray-800 md:text-xl absolute right-4 mt-4 md:right-15 md:mt-4"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  title={showPassword ? "Hide Password" : "Show Password"}
+          <form onSubmit={handleSignUp}>
+            <div className="mb-5">
+              <div>
+                <h1
+                  className="text-4xl font-bold"
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
-                  {showPassword ? <IoMdEye /> : <IoMdEyeOff />}
-                </span>
+                  Sign Up
+                </h1>
+              </div>
+
+              {error && (
+                <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-xs">
+                  {error}
+                </div>
+              )}
+
+              <div className="mt-8 md:text-base md:mb-2">
+                <div className="flex flex-row md:w-8/9 gap-4">
+                  <input
+                    type="text"
+                    placeholder="First Name"
+                    className="border border-gray-300 p-2 md:p-2 rounded-md w-full"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    disabled={loading}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Last Name"
+                    className="border border-gray-300 p-2 md:p-2 rounded-md w-full"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    disabled={loading}
+                  />
+                </div>
+
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="border border-gray-300 p-2 md:p-2 md:w-8/9 mt-4 rounded-md w-full"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
+                />
+
+                <div className="flex items-center mt-1 relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    className="border border-gray-300 p-2 md:p-2 md:w-8/9 rounded-md w-full mt-3"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
+                    minLength={6}
+                  />
+                  <span
+                    className="cursor-pointer text-gray-500 hover:text-gray-800 md:text-xl absolute right-4 mt-4 md:right-15 md:mt-4"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    title={showPassword ? "Hide Password" : "Show Password"}
+                  >
+                    {showPassword ? <IoMdEye /> : <IoMdEyeOff />}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <button className="bg-[#faf700] text-black mt-4 md:mt-1 px-33 md:px-42 py-2 rounded-lg hover:bg-[#04AA6D] hover:text-white transition duration-300 font-semibold select-none">
-              Sign Up
-            </button>
-            <p className="mt-3 font-semibold text-center select-none">
-              Already have an account?{" "}
-              <Link
-                to="/signin"
-                className="text-[#04AA6D] hover:text-gray-800 "
+
+            <div>
+              <button
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+                type="button"
+                className="bg-white  border-gray-300 text-gray-700 px-27 py-2 rounded-sm shadow-md 
+                hover:bg-gray-100 transition cursor-pointer duration-300 font-semibold 
+                select-none transform hover:scale-102 flex items-center gap-2 mb-3 mt-10"
               >
-                Sign In
-              </Link>
-            </p>
-          </div>
+                <img src={google} alt="Google" className="w-5 h-5" />
+                Sign Up with Google
+              </button>
+              <button
+                type="submit"
+                className="bg-[#faf700] text-black mt-4 md:mt-1 px-23 md:px-42 py-2 rounded-lg hover:bg-[#04AA6D] hover:text-white transition duration-300 font-semibold select-none disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={loading}
+              >
+                {loading ? "Signing Up..." : "Sign Up"}
+              </button>
+
+              <p className="mt-3 font-semibold text-center select-none">
+                Already have an account?{" "}
+                <Link
+                  to="/signin"
+                  className="text-[#04AA6D] hover:text-gray-800"
+                >
+                  Sign In
+                </Link>
+              </p>
+            </div>
+          </form>
         </div>
       </AnimatedPage>
     </div>

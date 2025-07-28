@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 
-
 type SignoutProps = {
   onConfirm: () => void;
   onCancel: () => void;

@@ -4,9 +4,24 @@ import {
 } from "react-icons/io5";
 import React from "react";
 import bg from "../assets/profileBg.jpg";
+import { useNavigate } from "react-router-dom";
+import {getAuth} from "firebase/auth";
 
 const Profile = () => {
   const [isHovered, setIsHovered] = React.useState(false);
+  const [name, setName] = React.useState(""); 
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const navigate = useNavigate();
+
+  if(!user) {
+    navigate("/")
+    return null;
+  }
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="relative flex justify-center items-center h-screen">
@@ -18,7 +33,7 @@ const Profile = () => {
         className="absolute top-10 left-20 z-50"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => window.history.back()}
+        onClick={handleBack}
       >
         {isHovered ? (
           <IoArrowBackCircleSharp className="text-5xl cursor-pointer text-white" />
@@ -38,25 +53,31 @@ const Profile = () => {
             <label>Name:</label>
             <input
               type="text"
-              className="border border-gray-300 p-2 w-[280px] rounded-md"
+              className="border border-gray-300 p-2 w-[300px] rounded-md"
+              value={user.displayName || "N/A"}
             />
           </div>
           <div className="flex flex-row gap-13 items-center">
             <label>Email:</label>
             <input
               type="text"
-              className="border border-gray-300 p-2 w-[280px] rounded-md"
+              className="border border-gray-300 p-2 w-[300px] rounded-md"
+              value={user.email || "N/A"}
+              readOnly
             />
+            
           </div>
           <div className="flex flex-row gap-5 items-center">
             <label>Password:</label>
             <input
               type="password"
-              className="border border-gray-300 p-2 w-[280px] rounded-md"
+              className="border border-gray-300 p-2 w-[300px] rounded-md"
+              readOnly
+              value="**********"
             />
           </div>
           <div className="flex flex-row gap-5 mt-4 justify-end items-center">
-            <button className="bg-[#faf700] hover:bg-[#04AA6D] hover:text-white shadow-md text-black p-2 text-[13px] w-[130px] rounded-[25px]">
+            <button className="bg-[#faf700] hover:bg-[#04AA6D] hover:text-white hover:scale-101 shadow-md text-black p-2 text-[13px] w-[130px] rounded-[25px] select-none transition-colors duration-300 ease-in-out">
               Save Changes
             </button>
           </div>

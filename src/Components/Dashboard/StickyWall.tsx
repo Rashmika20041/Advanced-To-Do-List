@@ -13,7 +13,7 @@ type StickyNote = {
   isEditing: boolean;
 };
 
-const sampleColors = ["#f6f6f6", "#fde68a", "#a7f3d0", "#bfdbfe", "#fca5a5"];
+const sampleColors = ["#f6f6f6", "#fde68a", "#FF9EF7", "#bfdbfe", "#fca5a5"];
 
 const StickyWall = () => {
   const [notes, setNotes] = useState<StickyNote[]>([]);
@@ -88,15 +88,15 @@ const StickyWall = () => {
           <h1 className="md:text-4xl font-bold text-gray-800">Sticky Wall</h1>
         </div>
 
-        <div className="px-5 py-3">
-          <div className="flex justify-left items-center h-10 mt-2 px-5">
+        <div className="py-3 px-6">
+          <div className={`flex flex-row justify-left w-233 w-[930px] items-center h-10 mt-2 border-1 border-gray-200 rounded-[8px] px-5`}>
             <button
+              className="md:text-sm text-gray-400 hover:text-[#11110f] select-none"
               onClick={handleAddSticky}
-              className="md:text-sm text-gray-600 hover:font-bold"
             >
               <span className="flex flex-row items-center gap-3">
                 <FaPlus />
-                Add New Sticky
+                Add New Task
               </span>
             </button>
           </div>
@@ -107,13 +107,13 @@ const StickyWall = () => {
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           {showBorder && (
-            <div className="p-4 grid md:grid-cols-3 sm:grid-cols-1 gap-5 border-1 border-gray-300 rounded-[8px]">
+            <div className="p-7 grid md:grid-cols-3 sm:grid-cols-1 gap-7 border-1 border-gray-200 rounded-[7px]">
               {currentNotes.map((note) => (
                 <div
                   key={note.id}
                   onClick={() => handleNoteClick(note.id)}
                   style={{ backgroundColor: note.color }}
-                  className="flex flex-col border-1 shadow-lg hover:shadow-xl border-gray-300 rounded-md w-68 h-72 p-4 cursor-pointer"
+                  className="flex flex-col border-1 shadow-xl hover:shadow-2xl border-gray-300 rounded-md w-68 h-72 p-4 cursor-pointer"
                 >
                   {note.isEditing ? (
                     <>
@@ -182,7 +182,7 @@ const StickyWall = () => {
 
           {/* Pagination Controls */}
           {notes.length > notesPerPage && (
-            <div className="flex justify-center mt-6 gap-4">
+            <div className="flex justify-center mt-3 gap-4">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}

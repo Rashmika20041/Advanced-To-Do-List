@@ -2,10 +2,10 @@ import "@fontsource/poppins/500.css";
 import { FaPlus } from "react-icons/fa6";
 import Navigation from "../SideNavigation/Navigation";
 import Task from "../Tasks/Task";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-const Today = () => {
+const Upcoming = () => {
   const [tasks, showTasks] = useState(false);
   const [borderWidth, setBorderWidth] = useState(false);
 
@@ -33,7 +33,7 @@ const Today = () => {
             className="md:text-4xl font-bold text-gray-800"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Today
+            Upcoming
           </h1>
           <div className="flex justify-center items-center ml-7 border-1 border-gray-300 rounded-[10px] w-10 h-10">
             <h1
@@ -74,4 +74,4 @@ const Today = () => {
     </div>
   );
 };
-export default Today;
+export default Upcoming;
