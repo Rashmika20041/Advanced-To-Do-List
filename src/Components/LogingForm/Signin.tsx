@@ -7,11 +7,11 @@ import AnimatedPage from "./AnimatedPage";
 import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [error, setError] = React.useState<string>("");
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const navigate = useNavigate();
 

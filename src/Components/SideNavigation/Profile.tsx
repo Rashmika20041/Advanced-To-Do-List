@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, updateProfile } from "firebase/auth";
 
 const Profile = () => {
-  const [isHovered, setIsHovered] = React.useState(false);
-  const [name, setName] = React.useState("");
-  const [error, setError] = React.useState("");
-  const [success, setSuccess] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
+  const [isHovered, setIsHovered] = React.useState<boolean>(false);
+  const [name, setName] = React.useState<string>("");
+  const [error, setError] = React.useState<string>("");
+  const [success, setSuccess] = React.useState<string>("");
+  const [loading, setLoading] = React.useState<boolean>(false);
   const auth = getAuth();
   const user = auth.currentUser;
   const navigate = useNavigate();

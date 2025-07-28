@@ -8,7 +8,7 @@ import Signout from "./Signout";
 import { useState } from "react";
 
 const Navigation = () => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
 
   const navigate = useNavigate();
 

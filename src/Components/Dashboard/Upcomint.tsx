@@ -6,8 +6,8 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Upcoming = () => {
-  const [tasks, showTasks] = useState(false);
-  const [borderWidth, setBorderWidth] = useState(false);
+  const [tasks, showTasks] = useState<boolean>(false);
+  const [borderWidth, setBorderWidth] = useState<boolean>(false);
 
   const newTask = () => {
     if (!tasks) {

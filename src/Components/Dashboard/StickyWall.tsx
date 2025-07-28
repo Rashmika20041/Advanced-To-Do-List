@@ -17,8 +17,8 @@ const sampleColors = ["#f6f6f6", "#fde68a", "#FF9EF7", "#bfdbfe", "#fca5a5"];
 
 const StickyWall = () => {
   const [notes, setNotes] = useState<StickyNote[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showBorder, setShowBorder] = useState(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [showBorder, setShowBorder] = useState<boolean>(false);
   const notesPerPage = 3;
   const totalPages = Math.ceil(notes.length / notesPerPage);
 
