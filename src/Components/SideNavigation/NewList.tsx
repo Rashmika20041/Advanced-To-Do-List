@@ -41,7 +41,7 @@ const NewList = ({ onClose, onAdd }: NewListProps) => {
         <input
           type="text"
           placeholder="List Name"
-          className="border border-gray-300 p-1 pl-8 text-sm font-medium rounded-md w-full"
+          className="border border-gray-300 p-1 pl-8 text-sm font-medium rounded-md w-full outline-none"
           value={listName}
           onChange={(e) => setListName(e.target.value)}
           onKeyDown={handleKeyDown}

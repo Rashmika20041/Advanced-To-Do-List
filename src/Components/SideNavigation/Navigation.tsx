@@ -6,14 +6,23 @@ import { FaNoteSticky } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import Signout from "./Signout";
 import { useState } from "react";
+import { getAuth, signOut } from "firebase/auth";
 
 const Navigation = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
+  const auth = getAuth();
+
   const handleLogout = () => {
-    navigate("/");
+    signOut(auth)
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Sign-out error:", error);
+      });
   };
 
   return (
@@ -35,7 +44,8 @@ const Navigation = () => {
         </h2>
         <ul className="text-sm font-semibold text-gray-600">
           <li>
-            <button className="flex flex-row gap-4 hover:font-bold items-center rounded-[5px] md:w-60 border-1 border-transparent hover:bg-gray-200 px-2 py-1"
+            <button
+              className="flex flex-row gap-4 hover:font-bold items-center rounded-[5px] md:w-60 border-1 border-transparent hover:bg-gray-200 px-2 py-1"
               onClick={() => navigate("/upcoming")}
             >
               <span className="text-base">

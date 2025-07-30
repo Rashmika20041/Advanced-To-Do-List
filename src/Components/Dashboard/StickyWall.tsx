@@ -1,9 +1,9 @@
 import "@fontsource/poppins/500.css";
 import Navigation from "../SideNavigation/Navigation";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
+import { MdUploadFile } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { useState } from "react";
-import { MdSaveAlt } from "react-icons/md";
 
 type StickyNote = {
   id: number;
@@ -13,7 +13,7 @@ type StickyNote = {
   isEditing: boolean;
 };
 
-const sampleColors = ["#f6f6f6", "#fde68a", "#FF9EF7", "#bfdbfe", "#fca5a5"];
+const sampleColors = ["#f6f6f6", "#fde68a", "#FF9EF7", "#a7f3d0", "#bfdbfe", "#fca5a5"];
 
 const StickyWall = () => {
   const [notes, setNotes] = useState<StickyNote[]>([]);
@@ -93,12 +93,12 @@ const StickyWall = () => {
         <div className="py-3 px-6">
           <div className="mt-2">
             <button
-              className="flex flex-row justify-left w-233 items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border-1 border-gray-200 hover:border-gray-400 rounded-[8px] h-10 px-5"
+              className="flex flex-row justify-left w-233 items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border-1 border-gray-200 hover:border-gray-400 rounded-[8px] h-12 px-5"
               onClick={handleAddSticky}
             >
               <span className="flex flex-row items-center gap-3">
                 <FaPlus />
-                Add New Task
+                Add Sticky Note
               </span>
             </button>
           </div>
@@ -156,10 +156,10 @@ const StickyWall = () => {
                             e.stopPropagation();
                             handleSave(note.id);
                           }}
-                          className="font-bold text-3xl pl-15 py-1 text-gray-700 hover:text-gray-400"
+                          className="font-bold text-3xl pl-11 py-1 text-gray-700 hover:text-gray-400"
                         >
                           <span>
-                            <MdSaveAlt />
+                            <MdUploadFile   />
                           </span>
                         </button>
                       </div>
@@ -184,7 +184,7 @@ const StickyWall = () => {
 
           {/* Pagination Controls */}
           {notes.length > notesPerPage && (
-            <div className="flex justify-center mt-3 gap-4">
+            <div className="flex justify-center mt-2 gap-4">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}

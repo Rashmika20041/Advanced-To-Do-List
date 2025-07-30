@@ -61,58 +61,58 @@ const Profile = () => {
   return (
     <div className="relative flex justify-center items-center h-screen">
       <div
-        className="absolute inset-0 bg-cover bg-center blur-[2px]"
+        className="absolute fixed top-0 left-0 w-full h-full bg-cover bg-center blur-[2px]"
         style={{
           backgroundImage: `url(${bg})`,
-          backgroundSize: "cover",
           zIndex: -1,
         }}
       ></div>
       <div
-        className="absolute top-10 left-20 z-50"
+        className="absolute top-8 left-8 md:top-10 md:left-20 z-50"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleBack}
       >
         {isHovered ? (
-          <IoArrowBackCircleSharp className="text-5xl cursor-pointer text-white" />
+          <IoArrowBackCircleSharp className="text-7xl md:text-5xl cursor-pointer text-white" />
         ) : (
-          <IoArrowBackCircleOutline className="text-5xl cursor-pointer text-white" />
+          <IoArrowBackCircleOutline className="text-7xl md:text-5xl cursor-pointer text-white" />
         )}
       </div>
       <div
-        className="flex flex-col bg-white border-1 border-gray-300 rounded-xl shadow-2xl px-20 pb-13 pt-10 gap-4"
+        className="flex flex-col bg-white border-1 border-gray-300 rounded-xl shadow-2xl px-10 pb-10 md:px-20 md:pb-13 pt-10 gap-4"
         style={{ fontFamily: "Poppins, sans-serif" }}
       >
         <div className="flex flex-row justify-center items-center">
-          <h1 className="text-2xl font-bold mb-4">Profile Settings</h1>
+          <h1 className="text-lg md:text-2xl font-bold mb-4">Profile Settings</h1>
         </div>
         <form onSubmit={handleEdit}>
           <div className="flex flex-col gap-4">
-            <div className="flex flex-row gap-12 items-center">
-              <label>Name:</label>
+            <div className="flex flex-row gap-15 items-center">
+              <label className="text-sm md:text-lg">Name:</label>
               <input
                 type="text"
-                className="border border-gray-300 p-2 w-[300px] rounded-md"
+                className="border border-gray-300 p-2 md:w-[300px] rounded-md text-sm md:text-base"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-            <div className="flex flex-row gap-13 items-center">
-              <label>Email:</label>
+            <div className="flex flex-row gap-16 items-center">
+              <label className="text-sm md:text-lg">Email:</label>
               <input
                 type="text"
-                className="border border-gray-300 p-2 w-[300px] rounded-md"
+                className="border border-gray-300 p-2 md:w-[300px] rounded-md text-sm md:text-base outline-none"
                 value={user.email || "N/A"}
                 readOnly
               />
             </div>
-            <div className="flex flex-row gap-5 items-center">
-              <label>Password:</label>
+            <div className="flex flex-row gap-7 items-center">
+              <label className="text-sm md:text-lg">Password:</label>
               <input
                 type="password"
-                className="border border-gray-300 p-2 w-[300px] rounded-md"
+                className="border border-gray-300 p-2 md:w-[300px] rounded-md text-sm md:text-base outline-none"
                 value={"**********"}
+                readOnly
               />
             </div>
             {error && (
@@ -127,7 +127,7 @@ const Profile = () => {
             )}
             <div className="flex flex-row gap-5 mt-2 justify-end items-center">
               <button
-                className="bg-[#faf700] hover:bg-[#04AA6D] hover:text-white hover:scale-101 shadow-md text-black p-2 text-[13px] w-[130px] rounded-[25px] select-none transition-colors duration-300 ease-in-out"
+                className="bg-[#faf700] hover:bg-[#04AA6D] hover:text-white hover:scale-101 shadow-md text-black p-2 text-xs w-[120px] md:text-[13px] md:w-[130px] rounded-[25px] select-none transition-colors duration-300 ease-in-out"
                 type="submit"
                 disabled={loading}
               >

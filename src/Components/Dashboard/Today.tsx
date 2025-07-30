@@ -1,18 +1,46 @@
 import "@fontsource/poppins/500.css";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaAngleRight } from "react-icons/fa6";
 import Navigation from "../SideNavigation/Navigation";
+import { FaCalendarTimes } from "react-icons/fa";
 import Task from "../Tasks/Task";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+const example = [
+  {
+    id: 1,
+    title: "Completea the project report",
+    description:
+      "Finish the final touches on the project report before submission.",
+    dueDate: "2023-10-15",
+    color: "#FF5733",
+    List: "Work",
+  },
+  {
+    id: 2,
+    title: "Prepare for the team meeting",
+    description:
+      "Gather all necessary documents and prepare the agenda for the meeting.",
+    dueDate: "2023-10-16",
+    color: "#33FF57",
+    List: "Personal",
+  },
+];
+
 const Today = () => {
   const [tasks, showTasks] = useState<boolean>(false);
   const [borderWidth, setBorderWidth] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [dueDate, setDueDate] = useState<number>();
+  const [color, setColor] = useState<string>("");
+  const [listname, setListName] = useState<string>("");
+
 
   const newTask = () => {
     if (!tasks) {
       showTasks(true);
-      setBorderWidth(true); 
+      setBorderWidth(true);
     }
   };
 
@@ -44,10 +72,12 @@ const Today = () => {
             </h1>
           </div>
         </div>
-        <div className="py-3">
+        <div className="mt-5">
           <div className="mt-2">
             <button
-              className={`flex flex-row justify-left w-233 ${borderWidth ? "w-[572px]" : "w-[930px]"} items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border-1 border-gray-200 hover:border-gray-400 rounded-[8px] h-10 px-5`}
+              className={`flex flex-row justify-left w-233 ${
+                borderWidth ? "w-[572px]" : "w-233"
+              } items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border border-gray-200 hover:border-gray-400 rounded-[8px] h-12 px-5`}
               onClick={newTask}
             >
               <span className="flex flex-row items-center gap-3">
@@ -57,8 +87,62 @@ const Today = () => {
             </button>
           </div>
         </div>
+
+        {example.map((item, index) => (
+        <div key={index}>
+          <div className="flex flex-row justify-center gap-3 pl-5 items-center mt-2">
+            <div>
+              <input
+                type="checkbox"
+                className="w-[15px] h-[15px] border border-gray-400 rounded-sm"
+              />
+            </div>
+            <div>
+              <h1
+                className="md:text-[12px] text-gray-800 font-normal"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                {item.title}
+              </h1>
+            </div>
+            <div className="flex flex-row justify-end ml-auto">
+              <FaAngleRight className="text-gray-400 text-lg" />
+            </div>
+          </div>
+          <div className="flex flex-row justify-start gap-3 pl-12 items-center mt-2">
+            <div className="flex flex-row gap-2">
+              <FaCalendarTimes className="text-gray-500 text-xs" />
+              <span
+                className="md:text-[11px] text-gray-800 font-normal"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                {item.dueDate}
+              </span>
+            </div>
+            <div>
+              <div className=" h-5 w-[2px] bg-gray-200 mx-2"></div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-4 h-4 rounded-[4px] border border-gray-300"
+                style={{ backgroundColor: item.color }}
+              ></div>
+              <span
+                className="text-[11px] font-semibold text-gray-700"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                {item.List}
+              </span>
+            </div>
+          </div>
+          <div>
+            <hr className="my-2 text-gray-200 border-t-2" />
+          </div>
+        </div>
+        ))}
+
       </div>
-      <AnimatePresence  onExitComplete={handleExitComplete}>
+      <AnimatePresence onExitComplete={handleExitComplete}>
         {tasks && (
           <motion.div
             initial={{ opacity: 0, x: 100 }}

@@ -5,6 +5,7 @@ import Task from "../Tasks/Task";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+
 const Upcoming = () => {
   const [tasks, showTasks] = useState<boolean>(false);
   const [borderWidth, setBorderWidth] = useState<boolean>(false);
@@ -47,7 +48,7 @@ const Upcoming = () => {
         <div className="py-3">
           <div className="mt-2">
             <button
-              className={`flex flex-row justify-left w-233 ${borderWidth ? "w-[572px]" : "w-[930px]"} items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border-1 border-gray-200 hover:border-gray-400 rounded-[8px] h-10 px-5`}
+              className={`flex flex-row justify-left w-233 ${borderWidth ? "w-[572px]" : "w-[930px]"} items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border-1 border-gray-200 hover:border-gray-400 rounded-[8px] h-12 px-5`}
               onClick={newTask}
             >
               <span className="flex flex-row items-center gap-3">
@@ -57,6 +58,7 @@ const Upcoming = () => {
             </button>
           </div>
         </div>
+               
       </div>
       <AnimatePresence  onExitComplete={handleExitComplete}>
         {tasks && (

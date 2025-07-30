@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NewList from "./NewList";
 import { FaPlus } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
@@ -35,11 +35,23 @@ const List = () => {
     }
 
     if (lists.length >= maxList) {
-      setError(`You can only have a maximum of ${maxList} lists.`);
+      setError(`You can only have a maximum of ${maxList} lists`);
       setShowNewList(false);
+      setShowDivider(false);
       return;
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+        setShowDivider(true);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleCloseNewList = () => {
     setShowNewList(false);
@@ -63,7 +75,7 @@ const List = () => {
 
       <div className="flex flex-col gap-2 mb-4">
         {lists.map((item, index) => (
-          <div key={index} className="flex items-center gap-4 px-2 py-1">
+          <div key={index} className="flex items-center gap-4 px-2 py-[2px] hover:border hover:border-x-2 border-gray-300 rounded">
             <div
               className="w-4 h-4 rounded-[4px] border border-gray-300"
               style={{ backgroundColor: item.color }}
