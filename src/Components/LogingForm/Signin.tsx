@@ -2,9 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import entryBg from "../assets/entryBg.png";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import AnimatedPage from "./AnimatedPage";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../../Firebase"; 
 
 const Signin = () => {
   const [email, setEmail] = React.useState<string>("");
@@ -27,7 +28,7 @@ const Signin = () => {
     }
 
     try {
-      await signInWithEmailAndPassword(getAuth(), email, password);
+      await signInWithEmailAndPassword(auth, email, password);
       navigate("/today");
       
     } catch (err: any) {

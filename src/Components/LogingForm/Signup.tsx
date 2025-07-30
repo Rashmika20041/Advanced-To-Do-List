@@ -5,12 +5,12 @@ import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import google from "../assets/google.png";
 import AnimatedPage from "./AnimatedPage";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
+import { auth } from "../../Firebase"; 
 
 const Signup = () => {
   const [firstName, setFirstName] = React.useState<string>("");
@@ -22,7 +22,6 @@ const Signup = () => {
   const [error, setError] = React.useState<string>("");
 
   const navigate = useNavigate();
-  const auth = getAuth();
 
   // React.useEffect(() => {
   //   const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -46,7 +45,6 @@ const Signup = () => {
 
   const handleGoogleSignIn = async () => {
   const provider = new GoogleAuthProvider();
-  const auth = getAuth();
 
   try {
     const result = await signInWithPopup(auth, provider);

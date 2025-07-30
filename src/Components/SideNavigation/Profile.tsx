@@ -5,7 +5,8 @@ import {
 import React from "react";
 import bg from "../assets/profileBg.jpg";
 import { useNavigate } from "react-router-dom";
-import { getAuth, updateProfile } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
+import { auth } from "../../Firebase"; 
 
 const Profile = () => {
   const [isHovered, setIsHovered] = React.useState<boolean>(false);
@@ -13,7 +14,6 @@ const Profile = () => {
   const [error, setError] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
-  const auth = getAuth();
   const user = auth.currentUser;
   const navigate = useNavigate();
 
