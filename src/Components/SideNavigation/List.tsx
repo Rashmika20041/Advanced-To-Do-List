@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import NewList from "./NewList";
 import { FaPlus } from "react-icons/fa6";
+import { MdDeleteForever } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 
 const List = () => {
@@ -75,14 +76,32 @@ const List = () => {
 
       <div className="flex flex-col gap-2 mb-4">
         {lists.map((item, index) => (
-          <div key={index} className="flex items-center gap-4 px-2 py-[2px] hover:border hover:border-x-2 border-gray-300 rounded">
-            <div
-              className="w-4 h-4 rounded-[4px] border border-gray-300"
-              style={{ backgroundColor: item.color }}
-            ></div>
-            <span className="text-sm font-medium text-gray-700">
-              {item.name}
-            </span>
+          <div
+            key={index}
+            className="group flex items-center justify-between gap-4 px-2 py-[2px]"
+          >
+            <div className="flex flex-row items-center gap-4">
+              <div
+                className="w-4 h-4 rounded-[4px] border border-gray-300"
+                style={{ backgroundColor: item.color }}
+              ></div>
+              <span className="text-sm font-medium text-gray-700">
+                {item.name}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <button className="text-gray-500 hover:text-red-600 transition-colors duration-200 hidden group-hover:flex">
+                <MdDeleteForever className="text-xl" />
+              </button>
+              <div className="flex justify-center items-center ml-7 bg-gray-200 rounded-[4px] w-7 h-5">
+                <p
+                  className="md:text-xs text-gray-800 font-semibold"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  1
+                </p>
+              </div>
+            </div>
           </div>
         ))}
       </div>

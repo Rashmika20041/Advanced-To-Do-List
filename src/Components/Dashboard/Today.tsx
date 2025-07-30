@@ -104,6 +104,12 @@ const Today = () => {
               >
                 {item.title}
               </h1>
+              <p
+                className="md:text-[11px] text-gray-500 font-normal"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                {item.description}
+              </p>
             </div>
             <div className="flex flex-row justify-end ml-auto">
               <FaAngleRight className="text-gray-400 text-lg" />

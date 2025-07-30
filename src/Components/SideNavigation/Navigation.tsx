@@ -45,24 +45,44 @@ const Navigation = () => {
         <ul className="text-sm font-semibold text-gray-600">
           <li>
             <button
-              className="flex flex-row gap-4 hover:font-bold items-center rounded-[5px] md:w-60 border-1 border-transparent hover:bg-gray-200 px-2 py-1"
+              className="group flex flex-row gap-4 justify-between hover:font-bold items-center rounded-[5px] md:w-60 border-1 border-transparent hover:bg-gray-200 px-2 py-1"
               onClick={() => navigate("/upcoming")}
             >
-              <span className="text-base">
-                <MdKeyboardDoubleArrowRight />
-              </span>
-              Upcoming
+              <div className="flex flex-row items-center gap-4">
+                <span className="text-base">
+                  <MdKeyboardDoubleArrowRight />
+                </span>
+                Upcoming
+              </div>
+              <div className="flex justify-center items-center ml-7 bg-gray-200 group-hover:bg-gray-100 rounded-[4px] w-7 h-5">
+                <p
+                  className="md:text-xs text-gray-800"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  5
+                </p>
+              </div>
             </button>
           </li>
           <li>
             <button
-              className=" flex flex-row gap-4 hover:font-bold items-center rounded-[5px] md:w-60 border-1 border-transparent hover:bg-gray-200 px-2 py-1"
+              className="group flex flex-row gap-4 justify-between hover:font-bold items-center rounded-[5px] md:w-60 border-1 border-transparent hover:bg-gray-200 px-2 py-1"
               onClick={() => navigate("/today")}
             >
-              <span className="text-base">
-                <MdOutlineMenuOpen />
-              </span>
-              Today
+              <div className="flex flex-row items-center gap-4">
+                <span className="text-base">
+                  <MdOutlineMenuOpen />
+                </span>
+                Today
+              </div>
+              <div className="flex justify-center items-center ml-7 bg-gray-200 group-hover:bg-gray-100 rounded-[4px] w-7 h-5">
+                <p
+                  className="md:text-xs text-gray-800"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  5
+                </p>
+              </div>
             </button>
           </li>
           <li>
