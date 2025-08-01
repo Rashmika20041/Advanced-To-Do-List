@@ -3,9 +3,21 @@ import NewList from "./NewList";
 import { FaPlus } from "react-icons/fa6";
 import { MdDeleteForever } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  orderBy,
+  query,
+} from "firebase/firestore";
+import { db } from "../../Firebase";
 
 const List = () => {
-  const [lists, setLists] = useState<{ name: string; color: string }[]>([]);
+  const [lists, setLists] = useState<
+    { id: string; name: string; color: string }[]
+  >([]);
   const [showNewList, setShowNewList] = useState<boolean>(false);
   const [showDivider, setShowDivider] = useState<boolean>(true);
   const [formKey, setFormKey] = useState<number>(0);
@@ -13,33 +25,22 @@ const List = () => {
   const maxList = 3;
 
   const handleNewList = () => {
-    // setShowNewList((prev) => {
-    //   if (prev) {
-    //     setShowDivider(true);
-    //     return false;
-    //   } else {
-    //     setShowDivider(false);
-    //     setFormKey((prev) => prev + 1);
-    //     return true;
-    //   }
-    // });
-
     setError("");
 
     if (!showNewList) {
+      if (lists.length >= maxList) {
+        setError(`You can only have a maximum of ${maxList} lists`);
+        setShowNewList(false);
+        setShowDivider(false);
+        return;
+      }
       setShowNewList(true);
       setShowDivider(false);
       setFormKey((prev) => prev + 1);
     }
     if (showNewList) {
       setShowDivider(true);
-    }
-
-    if (lists.length >= maxList) {
-      setError(`You can only have a maximum of ${maxList} lists`);
       setShowNewList(false);
-      setShowDivider(false);
-      return;
     }
   };
 
@@ -58,11 +59,56 @@ const List = () => {
     setShowNewList(false);
   };
 
-  const handleAddListItem = (name: string, color: string) => {
+  useEffect(() => {
+    fetchLists();
+    const intervalId = setInterval(() => {
+      fetchLists();
+    }, 2000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const fetchLists = async () => {
+    try {
+      const q = query(collection(db, "lists"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
+
+      const newLists = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as { name: string; color: string }),
+      }));
+
+      setLists(newLists);
+    } catch (e) {
+      console.error("Error fetching lists: ", e);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, "lists", id));
+      console.log("Document deleted with ID:", id);
+      fetchLists();
+    } catch (error) {
+      console.error("Error deleting document:", error);
+    }
+  };
+
+  const handleAddListItem = async (name: string, color: string) => {
     if (name.trim() === "") return;
-    setLists([{ name, color }, ...lists]);
-    handleCloseNewList();
-    setShowDivider(true);
+    try {
+      const docRef = await addDoc(collection(db, "lists"), {
+        name,
+        color,
+        createdAt: new Date(),
+      });
+      console.log("Document written with ID: ", docRef.id);
+      await fetchLists();
+      handleCloseNewList();
+      setShowDivider(true);
+    } catch (error) {
+      console.error("Error adding list to Firestore:", error);
+      setError("Failed to add list");
+    }
   };
 
   return (
@@ -75,9 +121,9 @@ const List = () => {
       </h2>
 
       <div className="flex flex-col gap-2 mb-4">
-        {lists.map((item, index) => (
+        {lists.map((item) => (
           <div
-            key={index}
+            key={item.id}
             className="group flex items-center justify-between gap-4 px-2 py-[2px]"
           >
             <div className="flex flex-row items-center gap-4">
@@ -90,7 +136,10 @@ const List = () => {
               </span>
             </div>
             <div className="flex items-center">
-              <button className="text-gray-500 hover:text-red-600 transition-colors duration-200 hidden group-hover:flex">
+              <button
+                className="text-gray-500 hover:text-red-600 transition-colors duration-200 hidden group-hover:flex"
+                onClick={() => handleDelete(item.id)}
+              >
                 <MdDeleteForever className="text-xl" />
               </button>
               <div className="flex justify-center items-center ml-7 bg-gray-200 rounded-[4px] w-7 h-5">

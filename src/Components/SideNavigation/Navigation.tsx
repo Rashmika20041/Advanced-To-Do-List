@@ -93,7 +93,7 @@ const Navigation = () => {
               <span className="text-base">
                 <FaNoteSticky />
               </span>
-              Sticky Note
+              Sticky Wall
             </button>
           </li>
         </ul>

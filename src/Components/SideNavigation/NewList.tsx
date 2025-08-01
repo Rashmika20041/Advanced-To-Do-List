@@ -20,6 +20,7 @@ const NewList = ({ onClose, onAdd }: NewListProps) => {
     "#fb00ff",
   ];
 
+  
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement | HTMLButtonElement>
   ) => {

@@ -36,7 +36,6 @@ const Today = () => {
   const [color, setColor] = useState<string>("");
   const [listname, setListName] = useState<string>("");
 
-
   const newTask = () => {
     if (!tasks) {
       showTasks(true);
@@ -89,64 +88,65 @@ const Today = () => {
         </div>
 
         {example.map((item, index) => (
-        <div key={index}>
-          <div className="flex flex-row justify-center gap-3 pl-5 items-center mt-2">
-            <div>
-              <input
-                type="checkbox"
-                className="w-[15px] h-[15px] border border-gray-400 rounded-sm"
-              />
+          <div key={index}>
+            <div className="group flex flex-row justify-center gap-3 pl-5 items-center mt-2">
+              <div>
+                <input
+                  type="checkbox"
+                  className="w-[15px] h-[15px] border border-gray-400 rounded-sm"
+                />
+              </div>
+              <button onClick={newTask} className="w-full">
+                <div className="flex flex-col items-start">
+                  <h1
+                    className="md:text-[12px] text-gray-800 font-normal"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    {item.title}
+                  </h1>
+                  <p
+                    className="md:text-[11px] text-gray-500 font-normal"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    {item.description}
+                  </p>
+                </div>
+              </button>
+              <div className="flex flex-row justify-end ml-auto">
+                <FaAngleRight className="text-gray-400 text-lg group-hover:text-gray-600" />
+              </div>
+            </div>
+            <div className="flex flex-row justify-start gap-3 pl-12 items-center mt-2">
+              <div className="flex flex-row gap-2">
+                <FaCalendarTimes className="text-gray-500 text-xs" />
+                <span
+                  className="md:text-[11px] text-gray-800 font-normal"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  {item.dueDate}
+                </span>
+              </div>
+              <div>
+                <div className=" h-5 w-[2px] bg-gray-200 mx-2"></div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-4 h-4 rounded-[4px] border border-gray-300"
+                  style={{ backgroundColor: item.color }}
+                ></div>
+                <span
+                  className="text-[11px] font-semibold text-gray-700"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  {item.List}
+                </span>
+              </div>
             </div>
             <div>
-              <h1
-                className="md:text-[12px] text-gray-800 font-normal"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                {item.title}
-              </h1>
-              <p
-                className="md:text-[11px] text-gray-500 font-normal"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                {item.description}
-              </p>
-            </div>
-            <div className="flex flex-row justify-end ml-auto">
-              <FaAngleRight className="text-gray-400 text-lg" />
+              <hr className="my-2 text-gray-200 border-t-2" />
             </div>
           </div>
-          <div className="flex flex-row justify-start gap-3 pl-12 items-center mt-2">
-            <div className="flex flex-row gap-2">
-              <FaCalendarTimes className="text-gray-500 text-xs" />
-              <span
-                className="md:text-[11px] text-gray-800 font-normal"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                {item.dueDate}
-              </span>
-            </div>
-            <div>
-              <div className=" h-5 w-[2px] bg-gray-200 mx-2"></div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div
-                className="w-4 h-4 rounded-[4px] border border-gray-300"
-                style={{ backgroundColor: item.color }}
-              ></div>
-              <span
-                className="text-[11px] font-semibold text-gray-700"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                {item.List}
-              </span>
-            </div>
-          </div>
-          <div>
-            <hr className="my-2 text-gray-200 border-t-2" />
-          </div>
-        </div>
         ))}
-
       </div>
       <AnimatePresence onExitComplete={handleExitComplete}>
         {tasks && (

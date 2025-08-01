@@ -24,12 +24,16 @@ const Profile = () => {
       setName(user.displayName);
     }
   }, [user, navigate]);
-
+  
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
     setLoading(true);
+
+    setTimeout(() => {
+       navigate("/today");
+    }, 2000);
 
     if (!name.trim()) {
       setError("Name cannot be empty");

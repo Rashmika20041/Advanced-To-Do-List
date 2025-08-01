@@ -1,15 +1,41 @@
 import { IoClose } from "react-icons/io5";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { collection, getDocs,} from "firebase/firestore";
+import { db } from "../../Firebase";
 
 type TaskProps = {
   onClose: () => void;
 };
 
 const Task = ({ onClose }: TaskProps) => {
-  const [list] = useState<{ name: string }[]>([]);
+  const [list, setLists] = useState<{ name: string }[]>([]);
   const [startDate, setStartDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    fetchLists();
+    const intervalId = setInterval(() => {
+      fetchLists();
+    }, 2000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const fetchLists = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "lists"));
+      const loadedLists = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          name: data.name,
+        };
+      });
+      setLists(loadedLists);
+    } catch (e) {
+      console.error("Error fetching lists: ", e);
+    }
+  };
 
   return (
     <div
@@ -52,10 +78,8 @@ const Task = ({ onClose }: TaskProps) => {
             </h2>
             <div className="w-64">
               <select className="w-[100px] h-[30px] border border-gray-300 rounded-md px-3 text-sm focus:outline-none">
-                {list.map((item, index) => (
-                  <option key={index} value={item.name}>
-                    {item.name}
-                  </option>
+                {list.map((item) => (
+                  <option key={item.name} value={item.name}>{item.name}</option>
                 ))}
               </select>
             </div>
@@ -78,8 +102,12 @@ const Task = ({ onClose }: TaskProps) => {
             </div>
           </div>
           <div className="absolute flex flex-row justify-between gap-5 bottom-5">
-            <button className="border-1 border-gray-400 rounded-md py-2 px-8 bg-transparent font-semibold text-gray-500 hover:text-gray-900 text-xs">Delete Task</button>
-            <button className="rounded-md py-2 px-7 bg-[#FFE100] font-semibold text-xs hover:bg-[#FFD000]">Save Changes</button>
+            <button className="border-1 border-gray-400 rounded-md py-2 px-8 bg-transparent font-semibold text-gray-500 hover:text-gray-900 text-xs">
+              Delete Task
+            </button>
+            <button className="rounded-md py-2 px-7 bg-[#FFE100] font-semibold text-xs hover:bg-[#FFD000]">
+              Save Changes
+            </button>
           </div>
         </div>
       </div>
