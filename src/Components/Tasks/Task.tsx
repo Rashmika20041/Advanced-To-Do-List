@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { collection, getDocs,} from "firebase/firestore";
 import { db } from "../../Firebase";
+import MyDropdown from "./MyDropdown";
 
 type TaskProps = {
   onClose: () => void;
@@ -69,19 +70,15 @@ const Task = ({ onClose }: TaskProps) => {
           />
         </div>
         <div className="flex flex-col mt-5">
-          <div className="flex flex-row justify-between items-center gap-15 mb-3">
+          <div className="flex flex-row items-center gap-15 mb-3">
             <h2
               className="text-xs font-semibold mb-1 text-gray-600"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Task
             </h2>
-            <div className="w-64">
-              <select className="w-[100px] h-[30px] border border-gray-300 rounded-md px-3 text-sm focus:outline-none">
-                {list.map((item) => (
-                  <option key={item.name} value={item.name}>{item.name}</option>
-                ))}
-              </select>
+            <div className="w-25">
+              <MyDropdown list={list} />
             </div>
           </div>
           <div className="flex flex-row justify-between items-center gap-5 mb-2">
