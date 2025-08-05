@@ -206,7 +206,7 @@ const StickyWall = () => {
   return (
     <div className="flex pl-5 pt-5">
       <Navigation today={0} upcoming={0} />
-      <div className="flex flex-col">
+      <div className="flex flex-col pl-[280px]">
         <div className="flex flex-row justify-left items-center pl-6 h-14">
           <h1
             className="md:text-4xl font-bold text-gray-800"

@@ -61,7 +61,6 @@ const Task = ({ onClose }: TaskProps) => {
   const handleSaveChanges = async () => {
     if (
       title.trim() === "" ||
-      description.trim() === "" ||
       !taskList ||
       !dueDate
     ) {
@@ -78,6 +77,7 @@ const Task = ({ onClose }: TaskProps) => {
         description: description.trim(),
         listName: taskList.name,
         listColor: taskList.color,
+        listId: taskList.id,
         dueDate: dueDate,
         completed: false,
         createdAt: serverTimestamp(),
@@ -178,12 +178,9 @@ const Task = ({ onClose }: TaskProps) => {
           {error && (
             <div className="mt-3 p-2 text-red-700 text-xs">{error}</div>
           )}
-          <div className="absolute flex flex-row justify-between gap-5 bottom-5">
-            <button className="border-1 border-gray-400 rounded-md py-2 px-8 bg-transparent font-semibold text-gray-500 hover:text-gray-900 text-xs">
-              Delete Task
-            </button>
+          <div className="absolute bottom-5">
             <button
-              className="rounded-md py-2 px-7 bg-[#FFE100] font-semibold text-xs hover:bg-[#FFD000]"
+              className="rounded-md py-2 px-[106px] bg-[#FFE100] font-semibold text-xs hover:bg-[#FFD000]"
               onClick={() => handleSaveChanges()}
             >
               Save Changes

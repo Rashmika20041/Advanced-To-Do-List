@@ -24,7 +24,8 @@ const customStyles = {
     ...base,
     minHeight: "30px",
     height: "25px",
-    fontSize: "14px",
+    padding: "0 9px",
+    fontSize: "12px",
     backgroundColor: "#f5f5f5ff",
     outline: "none",
     boxShadow: "none",
@@ -35,7 +36,7 @@ const customStyles = {
     ...base,
     backgroundColor: state.isFocused ? "#FEF08A" : "white",
     color: "#1F2937",
-    fontSize: "14px",
+    fontSize: "12px",
     cursor: "pointer",
   }),
   dropdownIndicator: (base: any) => ({

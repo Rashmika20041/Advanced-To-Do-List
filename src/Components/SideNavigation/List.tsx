@@ -16,16 +16,13 @@ import { db } from "../../Firebase";
 import { auth } from "../../Firebase";
 
 
-type ListProps = {
-  listNumber?: number;
-};
-
-const List = ({ listNumber }: ListProps) => {
+const List = () => {
   const [lists, setLists] = useState<
     { id: string; name: string; color: string }[]
   >([]);
   const [showNewList, setShowNewList] = useState<boolean>(false);
   const [showDivider, setShowDivider] = useState<boolean>(true);
+  const [taskCounts, setTaskCounts] = useState<Record<string, number>>({});
   const [formKey, setFormKey] = useState<number>(0);
   const [error, setError] = useState<string>("");
   const maxList = 3;
@@ -67,31 +64,55 @@ const List = ({ listNumber }: ListProps) => {
 
   useEffect(() => {
     fetchLists();
+    fetchTaskCounts();
     const intervalId = setInterval(() => {
       fetchLists();
+      fetchTaskCounts();
     }, 2000);
     return () => clearInterval(intervalId);
   }, []);
 
   const fetchLists = async () => {
+  try {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const listQuery = query(
+      collection(db, "users", user.uid, "lists"),
+      orderBy("createdAt", "asc")
+    );
+
+    const listSnapshot = await getDocs(listQuery);
+    const listData = listSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as { id: string; name: string; color: string }[];
+
+    setLists(listData);
+  } catch (error) {
+    console.error("Error fetching lists:", error);
+  }
+};
+
+
+  const fetchTaskCounts = async () => {
     try {
       const user = auth.currentUser;
       if (!user) return;
 
-      const q = query(
-        collection(db, "users", user.uid, "lists"),
-        orderBy("createdAt", "desc")
-      );
-      const querySnapshot = await getDocs(q);
+      const tasksSnapshot = await getDocs(collection(db, "users", user.uid, "tasks"));
+      const counts: Record<string, number> = {};
 
-      const newLists = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as { name: string; color: string }),
-      }));
-
-      setLists(newLists);
-    } catch (e) {
-      console.error("Error fetching lists: ", e);
+      tasksSnapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        const listId = data.listId;
+        if (listId) {
+          counts[listId] = (counts[listId] || 0) + 1;
+        }
+      });
+      setTaskCounts(counts);
+    } catch (error) {
+      console.error("Error fetching task counts:", error);
     }
   };
 
@@ -101,7 +122,8 @@ const List = ({ listNumber }: ListProps) => {
       if (!user) return;
       await deleteDoc(doc(db, "users", user.uid, "lists", id));
       console.log("Document deleted with ID:", id);
-      fetchLists();
+      fetchTaskCounts();
+      await fetchLists();
     } catch (error) {
       console.error("Error deleting document:", error);
     }
@@ -119,6 +141,7 @@ const List = ({ listNumber }: ListProps) => {
         createdAt: new Date(),
       });
       console.log("Document written with ID: ", docRef.id);
+      await fetchTaskCounts();
       await fetchLists();
       handleCloseNewList();
       setShowDivider(true);
@@ -164,7 +187,7 @@ const List = ({ listNumber }: ListProps) => {
                   className="md:text-xs text-gray-800 font-semibold"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  {listNumber !== undefined ? listNumber + 1 : "0"}
+                  {taskCounts[item.id] || 0}
                 </p>
               </div>
             </div>

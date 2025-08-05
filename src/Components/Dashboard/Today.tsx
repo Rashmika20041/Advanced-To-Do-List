@@ -10,7 +10,6 @@ import { onSnapshot } from "firebase/firestore";
 import { db } from "../../Firebase";
 import { auth } from "../../Firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import List from "../SideNavigation/List";
 
 const Today = () => {
   const [showTasks, setShowTasks] = useState(false);
@@ -91,7 +90,7 @@ const Today = () => {
     <div className="flex pt-5 overflow-x-hidden pl-5">
       <Navigation today={addTask.length} upcoming={0} />
       <div className="flex overflow-x-hidden pl-[280px]">
-        <div className="pl-6">
+        <div className="pl-8">
           <div className="flex flex-row justify-left items-center h-14">
             <h1
               className="md:text-4xl font-bold text-gray-800"
@@ -113,7 +112,7 @@ const Today = () => {
               <button
                 className={`flex flex-row justify-left w-227 ${
                   borderWidth ? "w-[572px]" : "w-227"
-                } items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border border-gray-200 hover:border-gray-400 rounded-[8px] h-12 px-5`}
+                } items-center mt-2 md:text-sm text-gray-400 hover:text-[#11110f] select-none border border-gray-200 hover:border-gray-400 mb-4 rounded-[8px] h-12 px-5`}
                 onClick={newTask}
               >
                 <span className="flex flex-row items-center gap-3">
@@ -203,7 +202,7 @@ const Today = () => {
               transition={{ duration: 0.1 }}
               className="ml-4 overflow-y-auto h-screen max-h-[calc(100vh-2.5rem)]"
             >
-              <Task onClose={handleClose} />
+              <Task onClose={handleClose}/>
             </motion.div>
           )}
         </AnimatePresence>
