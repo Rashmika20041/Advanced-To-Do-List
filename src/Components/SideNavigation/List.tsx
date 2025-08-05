@@ -13,8 +13,14 @@ import {
   query,
 } from "firebase/firestore";
 import { db } from "../../Firebase";
+import { auth } from "../../Firebase";
 
-const List = () => {
+
+type ListProps = {
+  listNumber?: number;
+};
+
+const List = ({ listNumber }: ListProps) => {
   const [lists, setLists] = useState<
     { id: string; name: string; color: string }[]
   >([]);
@@ -69,7 +75,13 @@ const List = () => {
 
   const fetchLists = async () => {
     try {
-      const q = query(collection(db, "lists"), orderBy("createdAt", "desc"));
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const q = query(
+        collection(db, "users", user.uid, "lists"),
+        orderBy("createdAt", "desc")
+      );
       const querySnapshot = await getDocs(q);
 
       const newLists = querySnapshot.docs.map((doc) => ({
@@ -85,7 +97,9 @@ const List = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteDoc(doc(db, "lists", id));
+      const user = auth.currentUser;
+      if (!user) return;
+      await deleteDoc(doc(db, "users", user.uid, "lists", id));
       console.log("Document deleted with ID:", id);
       fetchLists();
     } catch (error) {
@@ -96,7 +110,10 @@ const List = () => {
   const handleAddListItem = async (name: string, color: string) => {
     if (name.trim() === "") return;
     try {
-      const docRef = await addDoc(collection(db, "lists"), {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const docRef = await addDoc(collection(db, "users", user.uid, "lists"), {
         name,
         color,
         createdAt: new Date(),
@@ -147,7 +164,7 @@ const List = () => {
                   className="md:text-xs text-gray-800 font-semibold"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  1
+                  {listNumber !== undefined ? listNumber + 1 : "0"}
                 </p>
               </div>
             </div>

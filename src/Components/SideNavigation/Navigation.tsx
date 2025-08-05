@@ -8,11 +8,14 @@ import Signout from "./Signout";
 import { useState } from "react";
 import { getAuth, signOut } from "firebase/auth";
 
-const Navigation = () => {
+type NavigationProps = {
+  today?: number,
+  upcoming?: number,
+}
+
+const Navigation = ({ today = 0, upcoming = 0 }: NavigationProps) => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
-
   const navigate = useNavigate();
-
   const auth = getAuth();
 
   const handleLogout = () => {
@@ -26,7 +29,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="relative flex flex-col w-70 bg-[#f2f2f2] text-gray-800 rounded-[10px] h-screen max-h-[calc(100vh-2.5rem)] overflow-y-auto px-5 py-3">
+    <nav className="fixed flex flex-col w-70 bg-[#f2f2f2] text-gray-800 rounded-[10px] h-screen max-h-[calc(100vh-2.5rem)] overflow-y-auto px-5 py-3">
       <div>
         <h1
           className="text-lg font-bold"
@@ -59,7 +62,7 @@ const Navigation = () => {
                   className="md:text-xs text-gray-800"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  5
+                  {upcoming}
                 </p>
               </div>
             </button>
@@ -80,7 +83,7 @@ const Navigation = () => {
                   className="md:text-xs text-gray-800"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  5
+                  {today}
                 </p>
               </div>
             </button>

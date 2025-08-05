@@ -10,7 +10,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { auth } from "../../Firebase"; 
+import { auth } from "../../Firebase";
 
 const Signup = () => {
   const [firstName, setFirstName] = React.useState<string>("");
@@ -20,6 +20,13 @@ const Signup = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>("");
+
+  const user = auth.currentUser;
+
+  if (user) {
+    const uid = user.uid;
+    console.log("User UID:", uid);
+  }
 
   const navigate = useNavigate();
 
@@ -44,18 +51,18 @@ const Signup = () => {
   };
 
   const handleGoogleSignIn = async () => {
-  const provider = new GoogleAuthProvider();
+    const provider = new GoogleAuthProvider();
 
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    console.log("Google sign-in success:", user);
-  } catch (error) {
-    console.error("Google sign-in error:", error);
-  }finally {
-    setLoading(false);
-  }
-};
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("Google sign-in success:", user);
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,7 +118,6 @@ const Signup = () => {
       console.log(user.displayName);
 
       navigate("/today");
-      
     } catch (error: any) {
       console.error("Error signing up:", error.code, error.message);
 
