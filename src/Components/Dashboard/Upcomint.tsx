@@ -26,10 +26,14 @@ const Upcoming = () => {
   const [taskToEdit, setTaskToEdit] = useState<TaskToEdit | null>(null);
   const [addTask, setAddTask] = useState<TaskToEdit[]>([]);
   const todayDate = new Date().toLocaleDateString("en-CA");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (!user) return;
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       const tasksRef = query(
         collection(db, "users", user.uid, "tasks"),
@@ -57,6 +61,7 @@ const Upcoming = () => {
           };
         });
         setAddTask(tasks);
+        setLoading(false);
       });
 
       return () => unsubscribeTasks();
@@ -103,6 +108,14 @@ const Upcoming = () => {
   const handleExitComplete = () => {
     setBorderWidth(false);
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-600">
+        Loading your tasks...
+      </div>
+    );
+  }
 
   return (
     <div className="flex pt-5 overflow-x-hidden pl-5">
