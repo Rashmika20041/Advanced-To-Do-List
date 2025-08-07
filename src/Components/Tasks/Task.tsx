@@ -105,6 +105,7 @@ const Task = ({ onClose, taskToEdit }: TaskProps) => {
         completed: false,
         updatedAt: serverTimestamp(),
       });
+      setError("")
       onClose();
       } catch (error) {
         console.error("Error updating document:", error);

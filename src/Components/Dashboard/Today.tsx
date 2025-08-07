@@ -37,7 +37,7 @@ const Today = () => {
         return;
       }
 
-      setUserUid(user.uid); // ✅ Save uid to state
+      setUserUid(user.uid);
 
       const tasksRef = query(
         collection(db, "users", user.uid, "tasks"),
