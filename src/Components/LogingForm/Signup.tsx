@@ -57,6 +57,7 @@ const Signup = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       console.log("Google sign-in success:", user);
+      navigate("/today");
     } catch (error) {
       console.error("Google sign-in error:", error);
     } finally {
