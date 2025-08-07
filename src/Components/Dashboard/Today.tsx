@@ -26,10 +26,14 @@ const Today = () => {
   const [taskToEdit, setTaskToEdit] = useState<TaskToEdit | null>(null);
   const [addTask, setAddTask] = useState<TaskToEdit[]>([]);
   const todayDate = new Date().toLocaleDateString("en-CA");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (!user) return;
+      if (!user) {
+      setLoading(false);
+      return;
+    }
 
       const tasksRef = query(
         collection(db, "users", user.uid, "tasks"),
@@ -57,6 +61,7 @@ const Today = () => {
           };
         });
         setAddTask(tasks);
+        setLoading(false);
       });
 
       return () => unsubscribeTasks();
