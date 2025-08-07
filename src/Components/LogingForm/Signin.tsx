@@ -4,8 +4,10 @@ import entryBg from "../assets/entryBg.png";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import AnimatedPage from "./AnimatedPage";
+import google from "../assets/google.png";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../Firebase"; 
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const Signin = () => {
   const [email, setEmail] = React.useState<string>("");
@@ -15,6 +17,21 @@ const Signin = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const navigate = useNavigate();
+
+  const handleGoogleSignIn = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    setError("");
+    setLoading(true);
+    await signInWithPopup(auth, provider);
+    navigate("/today");
+  } catch (err: any) {
+    console.log("Google Sign-In Error:", err);
+    setError("Google sign-in failed. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,6 +136,17 @@ const Signin = () => {
                 </div>
               </div>
               <div>
+                <button
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+                type="button"
+                className="bg-white  border-gray-300 text-gray-700 px-27 py-2 rounded-sm shadow-md 
+                hover:bg-gray-100 transition cursor-pointer duration-300 font-semibold 
+                select-none transform hover:scale-102 flex items-center gap-2 mb-3 mt-10"
+              >
+                <img src={google} alt="Google" className="w-5 h-5" />
+                Sign Up with Google
+              </button>
                 <button
                   className="w-[391px] bg-[#faf700] text-black mt-4 md:mt-1 md:px-4 py-2 rounded-lg hover:bg-[#04AA6D] hover:text-white transition duration-300 font-semibold select-none text-center"
                   type="submit"
