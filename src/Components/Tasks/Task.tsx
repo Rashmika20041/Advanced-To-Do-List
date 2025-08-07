@@ -7,29 +7,53 @@ import {
   getDocs,
   addDoc,
   serverTimestamp,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
 import { db } from "../../Firebase";
 import MyDropdown from "./MyDropdown";
 import { auth } from "../../Firebase";
 
-
 type TaskProps = {
   onClose: () => void;
+  taskToEdit?: {
+    id: string;
+    title: string;
+    description: string;
+    dueDate: string;
+    name: string;
+    color: string;
+  } | null;
 };
 
-const Task = ({ onClose }: TaskProps) => {
+const Task = ({ onClose, taskToEdit }: TaskProps) => {
   const [lists, setLists] = useState<
     { id: string; name: string; color: string }[]
   >([]);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [dueDate, setDueDate] = useState<Date | null>(null);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [taskList, setTaskList] = useState<{
     id: string;
     name: string;
     color: string;
   } | null>(null);
+
+  useEffect(() => {
+    if (taskToEdit) {
+      setTitle(taskToEdit.title);
+      setDescription(taskToEdit.description);
+      setDueDate(new Date(taskToEdit.dueDate));
+      setTaskList({
+        id: taskToEdit.id,
+        name: taskToEdit.name,
+        color: taskToEdit.color,
+      });
+      setIsEditMode(true);
+    }
+  }, [taskToEdit]);
 
   useEffect(() => {
     fetchLists();
@@ -41,9 +65,11 @@ const Task = ({ onClose }: TaskProps) => {
 
   const fetchLists = async () => {
     try {
-       const user = auth.currentUser;
+      const user = auth.currentUser;
       if (!user) return;
-      const querySnapshot = await getDocs(collection(db, "users", user.uid, "lists"));
+      const querySnapshot = await getDocs(
+        collection(db, "users", user.uid, "lists")
+      );
       const loadedLists = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         return {
@@ -59,20 +85,17 @@ const Task = ({ onClose }: TaskProps) => {
   };
 
   const handleSaveChanges = async () => {
-    if (
-      title.trim() === "" ||
-      !taskList ||
-      !dueDate
-    ) {
+    if (title.trim() === "" || !taskList || !dueDate) {
       setError("All fields are required");
       return;
     }
+    const user = auth.currentUser;
+        if (!user) return;
 
-    try {
-      const user = auth.currentUser;
-      if (!user) return;
-
-      const docRef = await addDoc(collection(db, "users", user.uid, "tasks"), {
+    if (isEditMode && taskToEdit) {
+      try {
+        const docRef = doc(db, "users", user.uid, "tasks", taskToEdit.id);
+      await updateDoc(docRef, {
         title: title.trim(),
         description: description.trim(),
         listName: taskList.name,
@@ -80,19 +103,40 @@ const Task = ({ onClose }: TaskProps) => {
         listId: taskList.id,
         dueDate: dueDate,
         completed: false,
-        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
-      console.log("Document written with ID: ", docRef.id);
-      setError("");
       onClose();
-    } catch (error) {
-      console.error("Error adding document:", error);
-      setError("Failed to add task");
-    } finally {
-      setTitle("");
-      setDescription("");
-      setTaskList(null);
-      setDueDate(null);
+      } catch (error) {
+        console.error("Error updating document:", error);
+      }
+    } else {
+      try {
+
+        const docRef = await addDoc(
+          collection(db, "users", user.uid, "tasks"),
+          {
+            title: title.trim(),
+            description: description.trim(),
+            listName: taskList.name,
+            listColor: taskList.color,
+            listId: taskList.id,
+            dueDate: dueDate,
+            completed: false,
+            createdAt: serverTimestamp(),
+          }
+        );
+        console.log("Document written with ID: ", docRef.id);
+        setError("");
+        onClose();
+      } catch (error) {
+        console.error("Error adding document:", error);
+        setError("Failed to add task");
+      } finally {
+        setTitle("");
+        setDescription("");
+        setTaskList(null);
+        setDueDate(null);
+      }
     }
   };
 
@@ -178,12 +222,12 @@ const Task = ({ onClose }: TaskProps) => {
           {error && (
             <div className="mt-3 p-2 text-red-700 text-xs">{error}</div>
           )}
-          <div className="absolute bottom-5">
+          <div className="absolute bottom-5 bg-[#FFE100] hover:bg-[#FFD000] rounded-md w-8/9 flex justify-center items-center">
             <button
-              className="rounded-md py-2 px-[106px] bg-[#FFE100] font-semibold text-xs hover:bg-[#FFD000]"
+              className="py-2 px-4  font-semibold text-xs"
               onClick={() => handleSaveChanges()}
             >
-              Save Changes
+              {isEditMode ? "Save Changes" : "Add Task"}
             </button>
           </div>
         </div>

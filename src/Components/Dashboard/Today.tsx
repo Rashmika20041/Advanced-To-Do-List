@@ -11,20 +11,21 @@ import { db } from "../../Firebase";
 import { auth } from "../../Firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
+type TaskToEdit = {
+  id: string;
+  title: string;
+  description: string;
+  dueDate: string;
+  color: string;
+  name: string;
+};
+
 const Today = () => {
   const [showTasks, setShowTasks] = useState(false);
   const [borderWidth, setBorderWidth] = useState<boolean>(false);
-
-  const [addTask, setAddTask] = useState<
-    {
-      id: string;
-      title: string;
-      description: string;
-      dueDate: string;
-      color: string;
-      name: string;
-    }[]
-  >([]);
+  const [taskToEdit, setTaskToEdit] = useState<TaskToEdit | null>(null);
+  const [addTask, setAddTask] = useState<TaskToEdit[]>([]);
+  const todayDate = new Date().toLocaleDateString("en-CA");
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
@@ -38,17 +39,24 @@ const Today = () => {
       const unsubscribeTasks = onSnapshot(tasksRef, (snapshot) => {
         const tasks = snapshot.docs.map((doc) => {
           const data = doc.data();
+          let dueDateString = "";
+          if (data.dueDate) {
+            try {
+              dueDateString = data.dueDate.toDate().toLocaleDateString("en-CA");
+            } catch (e) {
+              dueDateString = "";
+            }
+          }
           return {
             id: doc.id,
             title: data.title,
             description: data.description,
-            dueDate: data.dueDate?.toDate().toISOString().split("T")[0] || "",
+            dueDate: dueDateString,
             color: data.listColor || "#ccc",
             name: data.listName,
           };
         });
         setAddTask(tasks);
-        console.log("Tasks updated:", tasks);
       });
 
       return () => unsubscribeTasks();
@@ -56,6 +64,9 @@ const Today = () => {
 
     return () => unsubscribeAuth();
   }, []);
+
+  const todayTasks = addTask.filter((task) => task.dueDate === todayDate);
+  const upcomingTasks = addTask.filter(task => task.dueDate > todayDate);
 
   const handleDeleteTask = async (taskId: string) => {
     setAddTask((prev) => prev.filter((task) => task.id !== taskId));
@@ -74,6 +85,13 @@ const Today = () => {
   };
 
   const newTask = () => {
+    setTaskToEdit(null);
+    setShowTasks(true);
+    setBorderWidth(true);
+  };
+
+  const handleTaskClick = (task: (typeof addTask)[number]) => {
+    setTaskToEdit(task);
     setShowTasks(true);
     setBorderWidth(true);
   };
@@ -86,9 +104,13 @@ const Today = () => {
     setBorderWidth(false);
   };
 
+  console.log("ALL TASKS:", addTask);
+  console.log("Today's date:", todayDate);
+  console.log("Today's tasks:", todayTasks);
+
   return (
     <div className="flex pt-5 overflow-x-hidden pl-5">
-      <Navigation today={addTask.length} upcoming={0} />
+      <Navigation today={todayTasks.length} upcoming={upcomingTasks.length} />
       <div className="flex overflow-x-hidden pl-[280px]">
         <div className="pl-8">
           <div className="flex flex-row justify-left items-center h-14">
@@ -103,7 +125,7 @@ const Today = () => {
                 className="md:text-3xl text-gray-800"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                {addTask.length}
+                {todayTasks.length}
               </h1>
             </div>
           </div>
@@ -124,7 +146,7 @@ const Today = () => {
           </div>
 
           <AnimatePresence>
-            {addTask.map((item) => (
+            {todayTasks.map((item) => (
               <motion.div
                 key={item.id}
                 initial={false}
@@ -140,7 +162,10 @@ const Today = () => {
                       onChange={() => handleDeleteTask(item.id)}
                     />
                   </div>
-                  <button onClick={newTask} className="w-full">
+                  <button
+                    onClick={() => handleTaskClick(item)}
+                    className="w-full"
+                  >
                     <div className="flex flex-col items-start">
                       <h1
                         className="md:text-[12px] text-gray-800 font-normal"
@@ -171,7 +196,7 @@ const Today = () => {
                     </span>
                   </div>
                   <div>
-                    <div className=" h-5 w-[2px] bg-gray-200 mx-2"></div>
+                    <div className="h-5 w-[2px] bg-gray-200 mx-2"></div>
                   </div>
                   <div className="flex items-center gap-2">
                     <div
@@ -202,7 +227,7 @@ const Today = () => {
               transition={{ duration: 0.1 }}
               className="ml-4 overflow-y-auto h-screen max-h-[calc(100vh-2.5rem)]"
             >
-              <Task onClose={handleClose}/>
+              <Task onClose={handleClose} taskToEdit={taskToEdit} />
             </motion.div>
           )}
         </AnimatePresence>
