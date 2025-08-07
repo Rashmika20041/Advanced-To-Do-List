@@ -116,6 +116,14 @@ const Today = () => {
   console.log("Today's date:", todayDate);
   console.log("Today's tasks:", todayTasks);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-600">
+        Loading your tasks...
+      </div>
+    );
+  }
+
   return (
     <div className="flex pt-5 overflow-x-hidden pl-5">
       <Navigation today={todayTasks.length} upcoming={upcomingTasks.length} />
