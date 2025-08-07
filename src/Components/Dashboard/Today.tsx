@@ -27,13 +27,17 @@ const Today = () => {
   const [addTask, setAddTask] = useState<TaskToEdit[]>([]);
   const todayDate = new Date().toLocaleDateString("en-CA");
   const [loading, setLoading] = useState(true);
+  const [userUid, setUserUid] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (!user) {
-      setLoading(false);
-      return;
-    }
+        setUserUid(null);
+        setLoading(false);
+        return;
+      }
+
+      setUserUid(user.uid); // ✅ Save uid to state
 
       const tasksRef = query(
         collection(db, "users", user.uid, "tasks"),
@@ -71,17 +75,16 @@ const Today = () => {
   }, []);
 
   const todayTasks = addTask.filter((task) => task.dueDate === todayDate);
-  const upcomingTasks = addTask.filter(task => task.dueDate > todayDate);
+  const upcomingTasks = addTask.filter((task) => task.dueDate > todayDate);
 
   const handleDeleteTask = async (taskId: string) => {
     setAddTask((prev) => prev.filter((task) => task.id !== taskId));
 
     try {
-      const user = auth.currentUser;
-      if (!user) return;
+      if (!userUid) return;
 
       setTimeout(async () => {
-        await deleteDoc(doc(db, "users", user.uid, "tasks", taskId));
+        await deleteDoc(doc(db, "users", userUid, "tasks", taskId));
         console.log("Document deleted with ID:", taskId);
       }, 300);
     } catch (error) {
