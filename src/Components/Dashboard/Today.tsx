@@ -92,6 +92,16 @@ const Today = () => {
     }
   };
 
+  useEffect(() => {
+    if (addTask.length === 0) return;
+
+    const deleteTasks = addTask.filter((task) => task.dueDate < todayDate);
+
+    if (deleteTasks.length > 0) {
+      deleteTasks.forEach((task) => handleDeleteTask(task.id));
+    }
+  }, [addTask, todayDate]);
+
   const newTask = () => {
     setTaskToEdit(null);
     setShowTasks(true);
