@@ -107,7 +107,7 @@ const Signin = () => {
                     {error}
                   </div>
                 )}
-                <div className="mt-8 md:text-base md:mb-2">
+                <div className="mt-8 md:text-base pl-5 pr-5 md:pl-0 md:pr-0 md:mb-2">
                   <input
                     type="email"
                     placeholder="Email"
@@ -140,7 +140,7 @@ const Signin = () => {
                 onClick={handleGoogleSignIn}
                 disabled={loading}
                 type="button"
-                className="bg-white  border-gray-300 text-gray-700 px-27 py-2 rounded-sm shadow-md 
+                className="bg-white  border-gray-300 text-gray-700 px-27 py-2 md:px-27 rounded-sm shadow-md 
                 hover:bg-gray-100 transition cursor-pointer duration-300 font-semibold 
                 select-none transform hover:scale-102 flex items-center gap-2 mb-3 mt-10"
               >
